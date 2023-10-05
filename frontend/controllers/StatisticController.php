@@ -2,18 +2,18 @@
 
 namespace frontend\controllers;
 
-use frontend\models\Item;
-use frontend\models\ItemSeacrh;
+use Exception;
 use frontend\models\Statistic;
+use frontend\models\StatisticSeacrh;
 use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * ItemController implements the CRUD actions for Item model.
+ * StatisticController implements the CRUD actions for Statistic model.
  */
-class ItemController extends Controller
+class StatisticController extends Controller
 {
     /**
      * @inheritDoc
@@ -34,44 +34,23 @@ class ItemController extends Controller
     }
 
     /**
-     * Lists all Item models.
+     * Lists all Statistic models.
      *
      * @return string
      */
     public function actionIndex()
     {
-        $searchModel = new ItemSeacrh();
+        $searchModel = new StatisticSeacrh();
         $dataProvider = $searchModel->search($this->request->queryParams);
-
-        $data = [
-            'accessTime' => date("Y-m-d H:i:s"),
-            'ip' => Yii::$app->request->userIP,
-            'host' => Yii::$app->request->hostInfo,
-            'pathInfo' => Yii::$app->request->pathInfo,
-            'queryString' => Yii::$app->request->queryString,
-        ];
-
-        Yii::$app->runAction('statistic/create', [
-            'accessTime' => $data['accessTime'],
-            'ip' => $data['ip'],
-            'host' => $data['host'],
-            'pathInfo' => $data['pathInfo'],
-            'queryString' => $data['queryString'],
-        ]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'accessTime' => $data['accessTime'],
-            'ip' => $data['ip'],
-            'host' => $data['host'],
-            'pathInfo' => $data['pathInfo'],
-            'queryString' => $data['queryString'],
         ]);
     }
 
     /**
-     * Displays a single Item model.
+     * Displays a single Statistic model.
      * @param int $id ID
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
@@ -84,29 +63,25 @@ class ItemController extends Controller
     }
 
     /**
-     * Creates a new Item model.
+     * Creates a new Statistic model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
-    public function actionCreate()
+    public function actionCreate($accessTime, $ip, $host, $pathInfo, $queryString)
     {
-        $model = new Item();
+        $model = new Statistic();
 
-        if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
-            }
-        } else {
-            $model->loadDefaultValues();
-        }
+        $model->access_time = $accessTime;
+        $model->user_ip = $ip;
+        $model->user_host = $host;
+        $model->path_info = $pathInfo;
+        $model->query_string = $queryString;
 
-        return $this->render('create', [
-            'model' => $model,
-        ]);
+        $model->save();
     }
 
     /**
-     * Updates an existing Item model.
+     * Updates an existing Statistic model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id ID
      * @return string|\yii\web\Response
@@ -126,7 +101,7 @@ class ItemController extends Controller
     }
 
     /**
-     * Deletes an existing Item model.
+     * Deletes an existing Statistic model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $id ID
      * @return \yii\web\Response
@@ -140,15 +115,15 @@ class ItemController extends Controller
     }
 
     /**
-     * Finds the Item model based on its primary key value.
+     * Finds the Statistic model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param int $id ID
-     * @return Item the loaded model
+     * @return Statistic the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Item::findOne(['id' => $id])) !== null) {
+        if (($model = Statistic::findOne(['id' => $id])) !== null) {
             return $model;
         }
 
