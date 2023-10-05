@@ -6,6 +6,7 @@ use frontend\models\Item;
 use frontend\models\ItemSeacrh;
 use frontend\models\Statistic;
 use Yii;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -28,6 +29,10 @@ class ItemController extends Controller
                     'actions' => [
                         'delete' => ['POST'],
                     ],
+                ],
+                'access' => [
+                    'class' => AccessControl::className(),
+                    'only' => ['create', 'update'],
                 ],
             ]
         );
