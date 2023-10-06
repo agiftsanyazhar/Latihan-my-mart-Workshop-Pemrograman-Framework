@@ -54,7 +54,6 @@ class Item extends \yii\db\ActiveRecord
             [['name', 'price', 'category_id'], 'required'],
             [['price', 'category_id'], 'integer'],
             [['name'], 'string', 'max' => 255],
-            [['created_at', 'updated_at', 'created_by', 'updated_by'], 'safe'],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => ItemCategory::class, 'targetAttribute' => ['category_id' => 'id']],
         ];
     }

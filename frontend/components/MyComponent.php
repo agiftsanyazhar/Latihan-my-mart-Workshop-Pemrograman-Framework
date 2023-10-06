@@ -12,8 +12,6 @@ class MyComponent extends Component
 
     static function myHandler()
     {
-        echo "<script>console.log('An event occurred')</script>";
-
         $model = new Statistic();
 
         $model->access_time = date("Y-m-d H:i:s");
