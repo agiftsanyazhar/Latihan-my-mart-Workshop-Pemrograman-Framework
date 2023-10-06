@@ -1,4 +1,7 @@
 <?php
+
+use frontend\components\MyComponent;
+
 $params = array_merge(
     require __DIR__ . '/../../common/config/params.php',
     require __DIR__ . '/../../common/config/params-local.php',
@@ -16,6 +19,11 @@ return [
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-frontend',
+        ],
+        'myComponent' => [
+            'class' => '\frontend\components\MyComponent',
+            'on after-something' => ['\frontend\components\MyComponent', 'myHandler'],
+
         ],
         'user' => [
             'identityClass' => 'common\models\User',
