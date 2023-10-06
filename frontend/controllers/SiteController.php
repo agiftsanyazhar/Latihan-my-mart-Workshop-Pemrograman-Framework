@@ -143,7 +143,6 @@ class SiteController extends Controller
      */
     public function actionAbout()
     {
-        Yii::$app->myComponent->trigger(\frontend\components\MyComponent::EVENT_AFTER_SOMETHING);
         return $this->render('about');
     }
 
