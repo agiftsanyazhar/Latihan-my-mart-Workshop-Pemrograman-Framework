@@ -67,17 +67,21 @@ class StatisticController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
-    public function actionCreate($accessTime, $ip, $host, $pathInfo, $queryString)
+    public function actionCreate()
     {
         $model = new Statistic();
 
-        $model->access_time = $accessTime;
-        $model->user_ip = $ip;
-        $model->user_host = $host;
-        $model->path_info = $pathInfo;
-        $model->query_string = $queryString;
+        if ($this->request->isPost) {
+            if ($model->load($this->request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+        } else {
+            $model->loadDefaultValues();
+        }
 
-        $model->save();
+        return $this->render('create', [
+            'model' => $model,
+        ]);
     }
 
     /**

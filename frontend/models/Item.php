@@ -3,6 +3,8 @@
 namespace frontend\models;
 
 use Yii;
+use yii\behaviors\BlameableBehavior;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "item".
@@ -24,6 +26,25 @@ class Item extends \yii\db\ActiveRecord
         return 'item';
     }
 
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::className(),
+                'attributes' => [
+                    \yii\db\ActiveRecord::EVENT_BEFORE_INSERT => ['created_at', 'updated_at'],
+                    \yii\db\ActiveRecord::EVENT_BEFORE_UPDATE => ['updated_at'],
+                ],
+                'value' => new \yii\db\Expression('NOW()'),
+            ],
+            [
+                'class' => BlameableBehavior::className(),
+                'createdByAttribute' => 'created_by',
+                'updatedByAttribute' => 'updated_by',
+            ],
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -33,6 +54,7 @@ class Item extends \yii\db\ActiveRecord
             [['name', 'price', 'category_id'], 'required'],
             [['price', 'category_id'], 'integer'],
             [['name'], 'string', 'max' => 255],
+            [['created_at', 'updated_at', 'created_by', 'updated_by'], 'safe'],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => ItemCategory::class, 'targetAttribute' => ['category_id' => 'id']],
         ];
     }

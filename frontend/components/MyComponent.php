@@ -2,6 +2,7 @@
 
 namespace frontend\components;
 
+use frontend\models\Statistic;
 use Yii;
 use yii\base\Component;
 
@@ -11,22 +12,16 @@ class MyComponent extends Component
 
     static function myHandler()
     {
-        echo "<script>console.log('An event occured')</script>";
+        echo "<script>console.log('An event occurred')</script>";
 
-        $data = [
-            'accessTime' => date("Y-m-d H:i:s"),
-            'ip' => Yii::$app->request->userIP,
-            'host' => Yii::$app->request->hostInfo,
-            'pathInfo' => Yii::$app->request->pathInfo,
-            'queryString' => Yii::$app->request->queryString,
-        ];
+        $model = new Statistic();
 
-        Yii::$app->runAction('statistic/create', [
-            'accessTime' => $data['accessTime'],
-            'ip' => $data['ip'],
-            'host' => $data['host'],
-            'pathInfo' => $data['pathInfo'],
-            'queryString' => $data['queryString'],
-        ]);
+        $model->access_time = date("Y-m-d H:i:s");
+        $model->user_ip = Yii::$app->request->userIP;
+        $model->user_host = Yii::$app->request->hostInfo;
+        $model->path_info = Yii::$app->request->pathInfo;
+        $model->query_string = Yii::$app->request->queryString;
+
+        $model->save();
     }
 }

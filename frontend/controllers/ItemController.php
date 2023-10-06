@@ -33,6 +33,10 @@ class ItemController extends Controller
                 'access' => [
                     'class' => AccessControl::className(),
                     'only' => ['create', 'update'],
+                    'rules' => [[
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ]]
                 ],
             ]
         );
