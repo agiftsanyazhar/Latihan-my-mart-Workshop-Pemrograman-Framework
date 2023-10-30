@@ -3,13 +3,13 @@
 namespace frontend\controllers;
 
 use frontend\models\Item;
-use frontend\models\ItemSeacrh;
-use frontend\models\Statistic;
+use frontend\models\ItemSearch;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 
 /**
  * ItemController implements the CRUD actions for Item model.
@@ -49,7 +49,7 @@ class ItemController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new ItemSeacrh();
+        $searchModel = new ItemSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
         Yii::$app->myComponent->trigger(\frontend\components\MyComponent::EVENT_AFTER_SOMETHING);
@@ -83,6 +83,16 @@ class ItemController extends Controller
         $model = new Item();
 
         if ($this->request->isPost) {
+            $model->image = UploadedFile::getInstance($model, 'image');
+
+            if ($model->image) {
+                $imageName = $model->image->baseName . '.' . $model->image->extension;
+
+                $model->image->saveAs('uploads/items/' . $imageName);
+
+                $model->image = $imageName;
+            }
+
             if ($model->load($this->request->post()) && $model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }

@@ -12,7 +12,7 @@ $params = array_merge(
 return [
     'id' => 'app-frontend',
     'name' => 'My Mart',
-    'defaultRoute' => 'item/index',
+    'defaultRoute' => 'product/index',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'controllerNamespace' => 'frontend\controllers',

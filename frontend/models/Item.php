@@ -12,9 +12,15 @@ use yii\behaviors\TimestampBehavior;
  * @property int $id
  * @property string $name
  * @property int $price
+ * @property string|null $image
  * @property int $category_id
+ * @property string|null $created_at
+ * @property string|null $updated_at
+ * @property int|null $created_by
+ * @property int|null $updated_by
  *
  * @property ItemCategory $category
+ * @property OrderItem[] $orderItems
  */
 class Item extends \yii\db\ActiveRecord
 {
@@ -53,7 +59,8 @@ class Item extends \yii\db\ActiveRecord
         return [
             [['name', 'price', 'category_id'], 'required'],
             [['price', 'category_id'], 'integer'],
-            [['name'], 'string', 'max' => 255],
+            [['name', 'image'], 'string', 'max' => 255],
+            [['image'], 'file', 'skipOnEmpty' => true, 'extensions' => ['png', 'jpg']],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => ItemCategory::class, 'targetAttribute' => ['category_id' => 'id']],
         ];
     }
@@ -67,6 +74,7 @@ class Item extends \yii\db\ActiveRecord
             'id' => 'ID',
             'name' => 'Name',
             'price' => 'Price',
+            'image' => 'Image',
             'category_id' => 'Category ID',
         ];
     }
@@ -79,5 +87,15 @@ class Item extends \yii\db\ActiveRecord
     public function getCategory()
     {
         return $this->hasOne(ItemCategory::class, ['id' => 'category_id']);
+    }
+
+    /**
+     * Gets query for [[OrderItems]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getOrderItems()
+    {
+        return $this->hasMany(OrderItem::class, ['item_id' => 'id']);
     }
 }

@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /** @var yii\web\View $this */
-/** @var frontend\models\ItemSeacrh $model */
+/** @var frontend\models\ItemSearch $model */
 /** @var yii\widgets\ActiveForm $form */
 ?>
 
@@ -21,7 +21,17 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'price') ?>
 
+    <?= $form->field($model, 'image') ?>
+
     <?= $form->field($model, 'category_id') ?>
+
+    <?php // echo $form->field($model, 'created_at') ?>
+
+    <?php // echo $form->field($model, 'updated_at') ?>
+
+    <?php // echo $form->field($model, 'created_by') ?>
+
+    <?php // echo $form->field($model, 'updated_by') ?>
 
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>

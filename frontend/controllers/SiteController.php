@@ -123,6 +123,9 @@ class SiteController extends Controller
     public function actionContact()
     {
         $model = new ContactForm();
+
+        Yii::$app->myComponent->trigger(\frontend\components\MyComponent::EVENT_AFTER_SOMETHING);
+
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->sendEmail(Yii::$app->params['adminEmail'])) {
                 Yii::$app->session->setFlash('success', 'Thank you for contacting us. We will respond to you as soon as possible.');
@@ -145,6 +148,8 @@ class SiteController extends Controller
      */
     public function actionAbout()
     {
+        Yii::$app->myComponent->trigger(\frontend\components\MyComponent::EVENT_AFTER_SOMETHING);
+
         return $this->render('about');
     }
 

@@ -7,9 +7,9 @@ use yii\data\ActiveDataProvider;
 use frontend\models\Item;
 
 /**
- * ItemSeacrh represents the model behind the search form of `frontend\models\Item`.
+ * ItemSearch represents the model behind the search form of `frontend\models\Item`.
  */
-class ItemSeacrh extends Item
+class ItemSearch extends Item
 {
     /**
      * {@inheritdoc}
@@ -18,7 +18,7 @@ class ItemSeacrh extends Item
     {
         return [
             [['id', 'price', 'category_id'], 'integer'],
-            [['name'], 'safe'],
+            [['name', 'image'], 'safe'],
         ];
     }
 
@@ -61,9 +61,14 @@ class ItemSeacrh extends Item
             'id' => $this->id,
             'price' => $this->price,
             'category_id' => $this->category_id,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
+            'created_by' => $this->created_by,
+            'updated_by' => $this->updated_by,
         ]);
 
-        $query->andFilterWhere(['like', 'name', $this->name]);
+        $query->andFilterWhere(['like', 'name', $this->name])
+            ->andFilterWhere(['like', 'image', $this->image]);
 
         return $dataProvider;
     }
