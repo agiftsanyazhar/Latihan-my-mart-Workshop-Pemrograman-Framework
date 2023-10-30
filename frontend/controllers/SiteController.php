@@ -75,6 +75,8 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+        Yii::$app->myComponent->trigger(\frontend\components\MyComponent::EVENT_AFTER_SOMETHING);
+
         return $this->render('index');
     }
 

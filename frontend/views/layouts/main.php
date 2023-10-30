@@ -39,8 +39,12 @@ AppAsset::register($this);
         $menuItems = [
             ['label' => 'Home', 'url' => ['/site/index']],
             ['label' => 'About', 'url' => ['/site/about']],
+            ['label' => 'Item Category', 'url' => ['/item-category/index']],
             ['label' => 'Item', 'url' => ['/item/index']],
-            ['label' => 'Item Kategori', 'url' => ['/item-category/index']],
+            ['label' => 'Customer', 'url' => ['/customer/index']],
+            ['label' => 'Customer Order', 'url' => ['/customer/show-order']],
+            ['label' => 'Order', 'url' => ['/order/index']],
+            ['label' => 'Order Item', 'url' => ['/order-item/index']],
             ['label' => 'Contact', 'url' => ['/site/contact']],
         ];
         if (Yii::$app->user->isGuest) {

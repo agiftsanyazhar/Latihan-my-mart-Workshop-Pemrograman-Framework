@@ -2,17 +2,18 @@
 
 namespace frontend\controllers;
 
-use frontend\models\ItemCategory;
-use frontend\models\ItemCategorySeacrh;
+use frontend\models\Customer;
+use frontend\models\CustomerSearch;
 use Yii;
+use yii\db\Query as DbQuery;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * ItemCategoryController implements the CRUD actions for ItemCategory model.
+ * CustomerController implements the CRUD actions for Customer model.
  */
-class ItemCategoryController extends Controller
+class CustomerController extends Controller
 {
     /**
      * @inheritDoc
@@ -33,13 +34,13 @@ class ItemCategoryController extends Controller
     }
 
     /**
-     * Lists all ItemCategory models.
+     * Lists all Customer models.
      *
      * @return string
      */
     public function actionIndex()
     {
-        $searchModel = new ItemCategorySeacrh();
+        $searchModel = new CustomerSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
         Yii::$app->myComponent->trigger(\frontend\components\MyComponent::EVENT_AFTER_SOMETHING);
@@ -51,7 +52,7 @@ class ItemCategoryController extends Controller
     }
 
     /**
-     * Displays a single ItemCategory model.
+     * Displays a single Customer model.
      * @param int $id ID
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
@@ -64,13 +65,13 @@ class ItemCategoryController extends Controller
     }
 
     /**
-     * Creates a new ItemCategory model.
+     * Creates a new Customer model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
     public function actionCreate()
     {
-        $model = new ItemCategory();
+        $model = new Customer();
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
@@ -86,7 +87,7 @@ class ItemCategoryController extends Controller
     }
 
     /**
-     * Updates an existing ItemCategory model.
+     * Updates an existing Customer model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id ID
      * @return string|\yii\web\Response
@@ -106,7 +107,7 @@ class ItemCategoryController extends Controller
     }
 
     /**
-     * Deletes an existing ItemCategory model.
+     * Deletes an existing Customer model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $id ID
      * @return \yii\web\Response
@@ -120,18 +121,42 @@ class ItemCategoryController extends Controller
     }
 
     /**
-     * Finds the ItemCategory model based on its primary key value.
+     * Finds the Customer model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param int $id ID
-     * @return ItemCategory the loaded model
+     * @return Customer the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = ItemCategory::findOne(['id' => $id])) !== null) {
+        if (($model = Customer::findOne(['id' => $id])) !== null) {
             return $model;
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionShowOrder()
+    {
+        $data = (new DbQuery())
+            ->select([
+                'order.id AS order_id',
+                'customer.nama AS customer_name',
+                'order.date AS order_date',
+                'item.name AS item_name',
+                'item.price AS item_price',
+                'item_category.name AS category_name',
+            ])
+            ->from('customer')
+            ->innerJoin('order', 'customer.id = order.customer_id')
+            ->innerJoin('order_item', 'order.id = order_item.order_id')
+            ->innerJoin('item', 'order_item.item_id = item.id')
+            ->innerJoin('item_category', 'item.category_id = item_category.id')
+            ->where(['customer.user_id' => Yii::$app->user->id])
+            ->all();
+
+        return $this->render('show-order', [
+            'data' => $data,
+        ]);
     }
 }
