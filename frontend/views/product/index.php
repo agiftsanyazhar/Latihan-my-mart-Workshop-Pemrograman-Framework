@@ -27,6 +27,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => new ArrayDataProvider([
             'allModels' => $models,
         ]),
+        'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
             'name',
@@ -36,10 +38,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'beli',
         ],
     ]) ?>
+
     <?php
-    // display pagination
     echo Bootstrap5LinkPager::widget([
-        'pagination' => $pagination,
+        'pagination' => $pages,
     ]);
     ?>
 

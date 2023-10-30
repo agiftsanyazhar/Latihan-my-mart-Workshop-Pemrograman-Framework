@@ -40,24 +40,29 @@ class ProductController extends \yii\web\Controller
 
     public function actionIndex()
     {
+        $searchModel = new ItemSearch();
+        $dataProvider = $searchModel->search($this->request->queryParams);
+
         $query = Item::find();
         $count = $query->count();
 
-        $pagination = new Pagination([
+        $pages = new Pagination([
             'totalCount' => $count,
             'defaultPageSize' => 10,
         ]);
 
         $models = $query
-            ->offset($pagination->offset)
-            ->limit($pagination->limit)
+            ->offset($pages->offset)
+            ->limit($pages->limit)
             ->all();
 
         Yii::$app->myComponent->trigger(MyComponent::EVENT_AFTER_SOMETHING);
 
         return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
             'models' => $models,
-            'pagination' => $pagination,
+            'pages' => $pages,
         ]);
     }
 }
