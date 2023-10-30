@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use frontend\components\MyComponent;
 use frontend\models\Item;
 use frontend\models\ItemSearch;
 use Yii;
@@ -52,7 +53,7 @@ class ItemController extends Controller
         $searchModel = new ItemSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
-        Yii::$app->myComponent->trigger(\frontend\components\MyComponent::EVENT_AFTER_SOMETHING);
+        Yii::$app->myComponent->trigger(MyComponent::EVENT_AFTER_SOMETHING);
 
         return $this->render('index', [
             'searchModel' => $searchModel,

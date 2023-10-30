@@ -1,10 +1,13 @@
 <?php
 
 use frontend\models\Item;
+use yii\bootstrap5\LinkPager as Bootstrap5LinkPager;
+use yii\data\ArrayDataProvider;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
+use yii\widgets\LinkPager;
 
 /** @var yii\web\View $this */
 /** @var frontend\models\ItemSearch $searchModel */
@@ -21,18 +24,24 @@ $this->params['breadcrumbs'][] = $this->title;
     ?>
 
     <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+        'dataProvider' => new ArrayDataProvider([
+            'allModels' => $models,
+        ]),
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
             'name',
             'price',
             'image',
             'category_id',
             'beli',
         ],
-    ]); ?>
+    ]) ?>
+    <?php
+    // display pagination
+    echo Bootstrap5LinkPager::widget([
+        'pagination' => $pagination,
+    ]);
+    ?>
 
 
 </div>

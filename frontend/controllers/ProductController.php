@@ -2,8 +2,11 @@
 
 namespace frontend\controllers;
 
+use frontend\components\MyComponent;
+use frontend\models\Item;
 use frontend\models\ItemSearch;
 use Yii;
+use yii\data\Pagination;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 
@@ -37,14 +40,24 @@ class ProductController extends \yii\web\Controller
 
     public function actionIndex()
     {
-        $searchModel = new ItemSearch();
-        $dataProvider = $searchModel->search($this->request->queryParams);
+        $query = Item::find();
+        $count = $query->count();
 
-        Yii::$app->myComponent->trigger(\frontend\components\MyComponent::EVENT_AFTER_SOMETHING);
+        $pagination = new Pagination([
+            'totalCount' => $count,
+            'defaultPageSize' => 10,
+        ]);
+
+        $models = $query
+            ->offset($pagination->offset)
+            ->limit($pagination->limit)
+            ->all();
+
+        Yii::$app->myComponent->trigger(MyComponent::EVENT_AFTER_SOMETHING);
 
         return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+            'models' => $models,
+            'pagination' => $pagination,
         ]);
     }
 }

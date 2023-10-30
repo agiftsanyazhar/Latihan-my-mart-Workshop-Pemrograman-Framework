@@ -42,8 +42,6 @@ class ItemCategoryController extends Controller
         $searchModel = new ItemCategorySeacrh();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
-        Yii::$app->myComponent->trigger(\frontend\components\MyComponent::EVENT_AFTER_SOMETHING);
-
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
